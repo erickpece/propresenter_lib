@@ -1,4 +1,4 @@
-from Slide import Slide, Slide_Color, Slide_Transition
+from slide import Slide, Slide_Color, Slide_Transition
 
 
 slide = Slide(

@@ -1,0 +1,7 @@
+<slides containerClass="NSMutableArray">
+	<RVDisplaySlide UUID="" backgroundColor="0 0 0 1" chordChartPath="" drawingBackgroundColor="0" enabled="1" highlightColor="1 0 0 1" hotKey="" label="" notes="" serialization-array-index="0" slideType="1" sort_index="0">
+		<cues containerClass="NSMutableArray"/>
+		<displayElements containerClass="NSMutableArray"/>
+		<_-RVProTransitionObject-_transitionObject motionDuration="20" motionEnabled="0" motionSpeed="100" transitionDuration="1" transitionType="-1"/>
+	</RVDisplaySlide>
+</slides>

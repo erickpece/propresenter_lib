@@ -1,4 +1,6 @@
 from enum import Enum
+from lxml import etree
+from shared import Shared
 
 
 class Slide_Color(Enum):
@@ -14,6 +16,7 @@ class Slide_Color(Enum):
 	yellow = 10
 	white = 11
 
+
 class Slide_Transition(Enum):
 	default = 1
 	dissolve = 2
@@ -25,11 +28,14 @@ class Slide_Transition(Enum):
 	cube = 8
 	door = 9
 
+
 class Slide:
 	def __init__(self, **kwargs):
 		self.label = kwargs.get("label")
 		self.color = kwargs.get("color")
 		self.transition = kwargs.get("transition")
+		self.enabled = kwargs.get("enabled", True)
+		self.notes = kwargs.get("notes")
 
 	def __str__(self):
 		description = "=" * 80
@@ -37,8 +43,19 @@ class Slide:
 		description += "=" * 80
 		description += "\nColor: {}".format(self.color)
 		description += "\nTransition: {}".format(self.transition)
+		description += "\nEnabled: {}".format(self.enabled)
 
 		return description
 
 	def xml(self):
-		return "Stub for ProPresenter slide XML"
+		with open("templates/slide.xml", "r") as template:
+			xml = template.read().replace('\n\t', '')
+
+		model = etree.fromstring(xml)
+
+		xml_slide = model.xpath("//RVDisplaySlide")[0]
+		xml_slide.attrib["UUID"] = Shared.get_uuid(self)
+		xml_slide.attrib["enabled"] = str(int(self.enabled))
+		xml_slide.attrib["label"] = self.label
+
+		return etree.tostring(model)

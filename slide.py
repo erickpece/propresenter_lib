@@ -1,6 +1,7 @@
 from enum import Enum
-from lxml import etree
 from shared import Shared
+from lxml import etree, objectify
+from propresenter_object import ProPresenterObject
 
 
 class Slide_Color(Enum):
@@ -29,33 +30,52 @@ class Slide_Transition(Enum):
 	door = 9
 
 
-class Slide:
+class Slide(ProPresenterObject):
 	def __init__(self, **kwargs):
-		self.label = kwargs.get("label")
-		self.color = kwargs.get("color")
-		self.transition = kwargs.get("transition")
+		self.label = kwargs.get("label", "")
+		self.slide_color = kwargs.get("slide_color", "")
+		self.transition = kwargs.get("transition", "")
 		self.enabled = kwargs.get("enabled", True)
-		self.notes = kwargs.get("notes")
-
-	def __str__(self):
-		description = "=" * 80
-		description += "\nSlide: {}\n".format(self.label)
-		description += "=" * 80
-		description += "\nColor: {}".format(self.color)
-		description += "\nTransition: {}".format(self.transition)
-		description += "\nEnabled: {}".format(self.enabled)
-
-		return description
+		self.notes = kwargs.get("notes", "")
+		self.index = kwargs.get("index", 0)
 
 	def xml(self):
-		with open("templates/slide.xml", "r") as template:
-			xml = template.read().replace('\n\t', '')
+		slide = objectify.Element("RVDisplaySlide")
+		slide.attrib['UUID'] = Shared.get_uuid(self)
+		slide.attrib['backgroundColor'] = "0 0 0 1"
+		slide.attrib['chordChartPath'] = ""
+		slide.attrib['drawingBackgroundColor'] = "0"
+		slide.attrib['enabled'] = str(int(self.enabled))
+		
+		if self.slide_color:
+			if self.slide_color == Slide_Color.red:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 0, 0)
+			if self.slide_color == Slide_Color.green:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 255, 0)
+			if self.slide_color == Slide_Color.blue:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 0, 255)
 
-		model = etree.fromstring(xml)
 
-		xml_slide = model.xpath("//RVDisplaySlide")[0]
-		xml_slide.attrib["UUID"] = Shared.get_uuid(self)
-		xml_slide.attrib["enabled"] = str(int(self.enabled))
-		xml_slide.attrib["label"] = self.label
+		slide.attrib['hotKey'] = ""
+		slide.attrib['label'] = self.label
+		slide.attrib['notes'] = ""
+		slide.attrib['serialization-array-index'] = str(self.index)
+		slide.attrib['slideType'] = "1"
+		slide.attrib['sort_index'] = str(self.index)
 
-		return etree.tostring(model)
+		cues = objectify.SubElement(slide, "cues")
+		cues.attrib['containerClass'] = "NSMutableArray"
+
+		display_elements = objectify.SubElement(slide, "displayElements")
+		display_elements.attrib['containerClass'] = "NSMutableArray"
+
+		# transition_object = objectify.SubElement(slide, "_-RVProTransitionObject-_transitionObject")
+		# transition_object.attrib['motionDuration'] = "20"
+		# transition_object.attrib['motionEnabled'] = "0"
+		# transition_object.attrib['motionSpeed'] = "100"
+		# transition_object.attrib['transitionDuration'] = "1"
+		# transition_object.attrib['transitionType'] = "-1"
+
+		objectify.deannotate(slide, pytype=True, xsi=True, xsi_nil=True, cleanup_namespaces=True)
+
+		return slide

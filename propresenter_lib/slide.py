@@ -28,6 +28,12 @@ class Slide(ProPresenterObject):
 		self.notes = kwargs.get("notes", "")
 		self.index = kwargs.get("index", 0)
 
+		# Create our media cue list
+		self.media_cues = []
+
+	def add_media(self, media_cue):
+		self.media_cues.append(media_cue)
+
 	def xml(self):
 		slide = objectify.Element("RVDisplaySlide")
 		slide.attrib['UUID'] = Shared.get_uuid(self)
@@ -70,9 +76,23 @@ class Slide(ProPresenterObject):
 		cues = objectify.SubElement(slide, "cues")
 		cues.attrib['containerClass'] = "NSMutableArray"
 
+		cue_index_value = 0
+
 		# Control cues, such as goto are applied here
 		if self.goto_next is not None:
-			cues.append(self.goto_next.xml())
+			goto_next_cue = self.goto_next
+			goto_next_cue.index = cue_index_value
+			cues.append(goto_next_cue.xml())
+
+			cue_index_value += 1
+
+		# Media cues are applied here
+		if len(self.media_cues) >= 0:
+			for media_cue in self.media_cues:
+				media_cue.index = cue_index_value
+				cues.append(media_cue.xml())
+
+			cue_index_value += 1
 
 		display_elements = objectify.SubElement(slide, "displayElements")
 		display_elements.attrib['containerClass'] = "NSMutableArray"

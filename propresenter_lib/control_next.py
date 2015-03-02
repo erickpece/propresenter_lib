@@ -8,6 +8,7 @@ class ControlNext(ProPresenterObject):
 	def __init__(self, **kwargs):
 		self.timer = kwargs.get("timer", 0)
 		self.loop_to_beginning = kwargs.get("loop_to_beginning", False)
+		self.index = kwargs.get("index", 0)
 
 	def xml(self):
 		control_cue = objectify.Element("RVControlCue")

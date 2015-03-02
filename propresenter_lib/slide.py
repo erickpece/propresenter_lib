@@ -18,23 +18,12 @@ class Slide_Color(Enum):
 	white = 11
 
 
-class Slide_Transition(Enum):
-	default = 1
-	dissolve = 2
-	iris = 3
-	ripple = 4
-	mod = 5
-	flip = 6
-	swap = 7
-	cube = 8
-	door = 9
-
-
 class Slide(ProPresenterObject):
 	def __init__(self, **kwargs):
 		self.label = kwargs.get("label", "")
 		self.slide_color = kwargs.get("slide_color", "")
-		self.transition = kwargs.get("transition", "")
+		self.transition = kwargs.get("transition", None)
+		self.goto_next = kwargs.get("goto_next", None)
 		self.enabled = kwargs.get("enabled", True)
 		self.notes = kwargs.get("notes", "")
 		self.index = kwargs.get("index", 0)
@@ -71,7 +60,6 @@ class Slide(ProPresenterObject):
 			if self.slide_color == Slide_Color.white:
 				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 255, 255)
 
-
 		slide.attrib['hotKey'] = ""
 		slide.attrib['label'] = self.label
 		slide.attrib['notes'] = ""
@@ -82,15 +70,16 @@ class Slide(ProPresenterObject):
 		cues = objectify.SubElement(slide, "cues")
 		cues.attrib['containerClass'] = "NSMutableArray"
 
+		# Control cues, such as goto are applied here
+		if self.goto_next is not None:
+			cues.append(self.goto_next.xml())
+
 		display_elements = objectify.SubElement(slide, "displayElements")
 		display_elements.attrib['containerClass'] = "NSMutableArray"
 
-		# transition_object = objectify.SubElement(slide, "_-RVProTransitionObject-_transitionObject")
-		# transition_object.attrib['motionDuration'] = "20"
-		# transition_object.attrib['motionEnabled'] = "0"
-		# transition_object.attrib['motionSpeed'] = "100"
-		# transition_object.attrib['transitionDuration'] = "1"
-		# transition_object.attrib['transitionType'] = "-1"
+		# Add transition, if specified
+		if self.transition is not None:
+			slide.append(self.transition.xml())
 
 		objectify.deannotate(slide, pytype=True, xsi=True, xsi_nil=True, cleanup_namespaces=True)
 

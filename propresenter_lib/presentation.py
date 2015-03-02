@@ -5,6 +5,7 @@ from .propresenter_object import ProPresenterObject
 
 
 class Presentation(ProPresenterObject):
+	
 	def __init__(self, **kwargs):
 		self.title = kwargs.get("title", "")
 		self.artist = kwargs.get("artist", "")

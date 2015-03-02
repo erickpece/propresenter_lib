@@ -1,7 +1,7 @@
 from enum import Enum
-from shared import Shared
+from .shared import Shared
 from lxml import etree, objectify
-from propresenter_object import ProPresenterObject
+from .propresenter_object import ProPresenterObject
 
 
 class Presentation(ProPresenterObject):

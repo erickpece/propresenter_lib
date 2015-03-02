@@ -1,6 +1,6 @@
-from slide import Slide, Slide_Color, Slide_Transition
-from presentation import Presentation
-from shared import Shared
+from propresenter_lib.slide import Slide, Slide_Color, Slide_Transition
+from propresenter_lib.presentation import Presentation
+from propresenter_lib.shared import Shared
 
 
 presentation = Presentation()

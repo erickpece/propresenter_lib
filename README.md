@@ -1,6 +1,10 @@
 # propresenter_lib
 
-This is a planned Python library designed to help generate ProPresenter files.
+This is a Python library designed to help generate ProPresenter files.  
+
+## Purpose
+
+This project was created to streamline a repetitive, weekly ProPresenter building process.  The scope of the current project is mostly for adding single media elements on each slide - not lyrics or other text.  I may add those capabilities in the future.
 
 ## Examples
 

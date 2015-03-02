@@ -7,26 +7,28 @@ from propresenter_lib.shared import Shared
 import calendar
 import time
 
-transition = Transition(transition_duration=2, transition_type=Slide_Transition.dissolve)
+def make_quick_slide(label, media_url, **kwargs):
+	transition = Transition(transition_duration=2, transition_type=Slide_Transition.dissolve)
 
-first = Slide(label="Logo", transition=transition)
-media = MediaCue(transition=transition, source = "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Logo.png")
-first.add_media(media)
+	slide = Slide(
+		label = label,
+		transition = transition
+	)
 
-second = Slide(label="Bottom Line", transition=transition)
-media2 = MediaCue(transition=transition, source = "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Bottom Line Week 1.png")
-second.add_media(media2)
+	media = MediaCue(
+		source = media_url,
+		transition = transition
+	)
 
-third = Slide(label="Verse", transition=transition)
-media3 = MediaCue(transition=transition, source = "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Preschool Verse.png")
-third.add_media(media3)
+	slide.add_media(media)
 
+	return slide
 
 presentation = Presentation()
-presentation.add_slide(first)
-presentation.add_slide(second)
-presentation.add_slide(third)
-presentation.xml_string()
+
+presentation.add_slide(make_quick_slide("Logo", "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Logo.png"))
+presentation.add_slide(make_quick_slide("Bottom Line", "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Bottom Line Week 1.png"))
+presentation.add_slide(make_quick_slide("Verse", "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Preschool Verse.png"))
 
 Shared.write_to_file(None, '/Users/erick/Desktop/protest_{}.pro5'.format(calendar.timegm(time.gmtime())), presentation.xml_string())
 print(presentation.xml_string())

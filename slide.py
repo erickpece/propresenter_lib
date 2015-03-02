@@ -48,12 +48,28 @@ class Slide(ProPresenterObject):
 		slide.attrib['enabled'] = str(int(self.enabled))
 		
 		if self.slide_color:
-			if self.slide_color == Slide_Color.red:
-				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 0, 0)
-			if self.slide_color == Slide_Color.green:
-				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 255, 0)
+			if self.slide_color == Slide_Color.black:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 0, 0)
 			if self.slide_color == Slide_Color.blue:
 				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 0, 255)
+			if self.slide_color == Slide_Color.brown:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 153, 102, 51)
+			if self.slide_color == Slide_Color.cyan:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 255, 255)
+			if self.slide_color == Slide_Color.green:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 0, 255, 0)
+			if self.slide_color == Slide_Color.magenta:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 0, 255)
+			if self.slide_color == Slide_Color.orange:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 127, 0)
+			if self.slide_color == Slide_Color.purple:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 127, 0, 127)
+			if self.slide_color == Slide_Color.red:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 0, 0)
+			if self.slide_color == Slide_Color.yellow:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 255, 0)
+			if self.slide_color == Slide_Color.white:
+				slide.attrib['highlightColor'] = Shared.rgb_hex_to_propresenter_color(self, 255, 255, 255)
 
 
 		slide.attrib['hotKey'] = ""

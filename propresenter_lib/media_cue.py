@@ -9,6 +9,7 @@ from .propresenter_object import ProPresenterObject
 class MediaCue(ProPresenterObject):
 	def __init__(self, **kwargs):
 		self.source = kwargs.get("source")
+		self.foreground = kwargs.get("foreground", True)
 		self.transition = kwargs.get("transition", None)
 		self.index = kwargs.get("index", 0)
 
@@ -21,7 +22,13 @@ class MediaCue(ProPresenterObject):
 		mediacue = objectify.Element("RVMediaCue")
 		mediacue.attrib['UUID'] = Shared.get_uuid(self)
 		mediacue.attrib['alignment'] = "4"
-		mediacue.attrib['behavior'] = "2"
+
+		# Foreground (True) or background (False)?
+		if self.foreground:
+			mediacue.attrib['behavior'] = "2"
+		else:
+			mediacue.attrib['behavior'] = "1"
+
 		mediacue.attrib['delayTime'] = "0"
 		mediacue.attrib['displayName'] = self.display_name
 		mediacue.attrib['elementClassName'] = "RVImageElement"

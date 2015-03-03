@@ -29,19 +29,41 @@ def make_quick_slide(label, media_url, **kwargs):
 
 	slide.add_cue(media)
 
-	cue = ClearAudio()
-	slide.add_cue(cue)
+	if kwargs.get("go_to_next"):
+		cue = GotoNext(kwargs.get("go_to_next"))
+		slide.add_cue(cue)
 
-	cue2 = GotoNext(timer = 5)
-	slide.add_cue(cue2)
+	if kwargs.get("clear_audio"):
+		cue = ClearAudio()
+		slide.add_cue(cue)
 
 	return slide
 
 presentation = Presentation()
 
-presentation.add_slide(make_quick_slide("Logo", "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Logo.png"))
-presentation.add_slide(make_quick_slide("Bottom Line", "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Bottom Line Week 1.png", foreground=False))
-presentation.add_slide(make_quick_slide("Verse", "/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Preschool Verse.png"))
+presentation.add_slide(
+	make_quick_slide(
+		"Logo", 
+		"/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Logo.png",
+		clear_audio=True
+	)
+)
 
-Shared.write_to_file(None, '/Users/erick/Desktop/protest_{}.pro5'.format(calendar.timegm(time.gmtime())), presentation.xml_string())
+presentation.add_slide(
+	make_quick_slide(
+		"Bottom Line", 
+		"/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Bottom Line Week 1.png", 
+		foreground=True,
+		go_to_next=True
+	)
+)
+
+presentation.add_slide(
+	make_quick_slide(
+		"Verse", 
+		"/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Preschool Verse.png"
+	)
+)
+
+Shared.write_to_file(None, '/Users/erick/Desktop/pro5test_{}.pro5'.format(calendar.timegm(time.gmtime())), presentation.xml_string())
 print(presentation.xml_string())

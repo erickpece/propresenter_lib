@@ -23,16 +23,15 @@ class Slide(ProPresenterObject):
 		self.label = kwargs.get("label", "")
 		self.slide_color = kwargs.get("slide_color", "")
 		self.transition = kwargs.get("transition", None)
-		self.goto_next = kwargs.get("goto_next", None)
 		self.enabled = kwargs.get("enabled", True)
 		self.notes = kwargs.get("notes", "")
 		self.index = kwargs.get("index", 0)
 
-		# Create our media cue list
-		self.media_cues = []
+		# Create cue list
+		self.cues = []
 
-	def add_media(self, media_cue):
-		self.media_cues.append(media_cue)
+	def add_cue(self, cue):
+		self.cues.append(cue)
 
 	def xml(self):
 		slide = objectify.Element("RVDisplaySlide")
@@ -78,19 +77,11 @@ class Slide(ProPresenterObject):
 
 		cue_index_value = 0
 
-		# Control cues, such as goto are applied here
-		if self.goto_next is not None:
-			goto_next_cue = self.goto_next
-			goto_next_cue.index = cue_index_value
-			cues.append(goto_next_cue.xml())
-
-			cue_index_value += 1
-
-		# Media cues are applied here
-		if len(self.media_cues) >= 0:
-			for media_cue in self.media_cues:
-				media_cue.index = cue_index_value
-				cues.append(media_cue.xml())
+		# Control cues
+		if len(self.cues) >= 0:
+			for cue in self.cues:
+				cue.index = cue_index_value
+				cues.append(cue.xml())
 
 			cue_index_value += 1
 

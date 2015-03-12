@@ -52,7 +52,7 @@ presentation.add_slide(
 presentation.add_slide(
 	make_quick_slide(
 		"Bottom Line", 
-		"/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Bottom Line Week 1.png", 
+		"/Users/erick/Documents/The Cove/Cove Kids/Series/2015-02-21 Big Questions/2015-03-01/2015-03-01 - Big Questions - Worship and Praise.mp4", 
 		foreground=True,
 		go_to_next=True
 	)
@@ -66,4 +66,5 @@ presentation.add_slide(
 )
 
 Shared.write_to_file(None, '/Users/erick/Desktop/pro5test_{}.pro5'.format(calendar.timegm(time.gmtime())), presentation.xml_string())
-print(presentation.xml_string())
+# print(presentation.xml_string())
+presentation.xml_string()

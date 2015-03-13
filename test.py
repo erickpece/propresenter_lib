@@ -9,11 +9,13 @@ from propresenter_lib.control_cue import ControlCue
 from propresenter_lib.controls import GotoNext, ClearAll, ClearBackground, ClearAudio
 import calendar
 import time
+import yaml
+import os
 
 
 def make_quick_slide(label, media_url, **kwargs):
 	transition = Transition(
-		transition_duration = 2, 
+		transition_duration = 1, 
 		transition_type = Slide_Transition.dissolve
 	)
 
@@ -40,69 +42,44 @@ def make_quick_slide(label, media_url, **kwargs):
 
 	return slide
 
-presentation = Presentation(title="2015-03-22 | Preschool")
+def build_propresenter_from_yaml(path):
+	config = yaml.load(open(path))
+	
+	# Capture global settings
+	date = config['date']
+	series = config['series']
+	week = config['week']
+	base_path = config['media_path']
 
-presentation.add_slide(
-	make_quick_slide(
-		"Logo", 
-		"/Users/erick/Desktop/2015-03-15/2015-03-15 - Big Questions - Logo.png",
-		clear_audio=True
-	)
-)
+	# Create playlist
+	playlist_title = "{} - {} - Cove Kids".format(date, series)
+	playlist = Playlist(name = playlist_title)
 
-presentation.add_slide(
-	make_quick_slide(
-		"Worship & Praise", 
-		"/Users/erick/Desktop/2015-03-15/2015-03-15 - Big Questions - Worship and Praise.mp4", 
-		foreground=True,
-		go_to_next=True
-	)
-)
+	for media in config['media']:
+		# Create presentation
+		presentation_name = "{} | {}".format(date, media)
+		presentation = Presentation(presentation_name)
 
-presentation.add_slide(
-	make_quick_slide(
-		"Path Straight", 
-		"/Users/erick/Desktop/2015-03-15/2015-03-15 - Big Questions - Path Straight.mp4",
-		foreground=True,
-		go_to_next=True
-	)
-)
+		for slide in config['media'][media]:
+			media_path = os.path.join(base_path, slide['file'])
+			base_name = os.path.basename(media_path)
+			base_name = os.path.splitext(base_name)[0]
+			base_name = base_name.split("-")
+			base_name = base_name[len(base_name)-1]
 
-presentation.add_slide(
-	make_quick_slide(
-		"Logo", 
-		"/Users/erick/Desktop/2015-03-15/2015-03-15 - Big Questions - Logo.png",
-		clear_audio=True
-	)
-)
+			on_end = slide['onend']
 
-presentation.add_slide(
-	make_quick_slide(
-		"Trust in the Lord", 
-		"/Users/erick/Desktop/2015-03-15/2015-03-15 - Big Questions - 2s Trust in the Lord.mp4",
-		foreground=True,
-		go_to_next=True
-	)
-)
+			# Create slide
+			new_slide = make_quick_slide(
+				base_name, 
+				media_path
+			)
 
-# Shared.write_to_file(None, '/Users/erick/Desktop/pro5test_{}.pro5'.format(calendar.timegm(time.gmtime())), presentation.xml_string())
+			presentation.add_slide(new_slide)
 
-presentation2 = Presentation("2015-03-22 | Grade School")
+		playlist.add_presentation(presentation)
 
-presentation2.add_slide(
-	make_quick_slide(
-		"Logo", 
-		"/Users/erick/Desktop/2015-03-15/2015-03-15 - Big Questions - Logo.png",
-		clear_audio=True
-	)
-)
+	playlist.write_file('/Users/erick/Desktop')
 
-# Shared.write_to_file(None, '/Users/erick/Desktop/pro5test_{}-2.pro5'.format(calendar.timegm(time.gmtime())), presentation2.xml_string())
+build_propresenter_from_yaml('definition.yaml')
 
-
-playlist = Playlist(name="2015-03-22 Cove Kids")
-playlist.add_presentation(presentation)
-playlist.add_presentation(presentation2)
-
-# print(playlist.xml_string())
-playlist.write_file('/Users/erick/Desktop')

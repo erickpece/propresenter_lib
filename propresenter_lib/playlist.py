@@ -62,13 +62,10 @@ class Playlist(ProPresenterObject):
 		media_files = list(set(media_files))
 
 		for media in media_files:
-			print(media)
 			zip_file.write(media, "{}.pro5plx/{}".format(self.name, media))
 
 		# We're done - close it!
 		zip_file.close()
-
-		print(project_dir)
 
 		# Let's clean up by removing the temp folder
 		shutil.rmtree(project_dir)

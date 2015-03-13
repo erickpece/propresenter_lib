@@ -1,4 +1,6 @@
+import os
 import uuid
+import shutil
 
 
 class Shared:
@@ -14,3 +16,13 @@ class Shared:
 		target = open(filename, 'w')
 		target.write(data.decode())
 		target.close()
+
+	def copy_file(self, source, target):
+		head, tail = os.path.split(source)
+
+		destination = os.path.join(target, tail)
+		# destination += ".{}".format(extension)
+
+		print("Trying to copy {} to {}".format(source, destination))
+
+		shutil.copy(source, destination)
